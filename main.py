@@ -5,6 +5,10 @@ import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.naive_bayes import GaussianNB
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.svm import SVC
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn import preprocessing
 from collections import defaultdict
 
@@ -63,8 +67,15 @@ full = pandas.concat(frames)
 #Randomize order
 final = full.sample(frac=1)
 
+#Get word count
+final['word_count'] = 0
+for index, row in final.iterrows():
+    row['word_count'] = len(row['text'].split())
+    final.at[index,'word_count'] = len(row['text'].split())
+
+
 #Set columns we want to base prediction off
-feature_cols = ['retweet_count','reply_count','favorite_count']
+feature_cols = ['retweet_count','reply_count','favorite_count', 'word_count']
 
 #Convert values in featured columns to floats
 for col in feature_cols:
@@ -78,7 +89,7 @@ X = train.loc[:, feature_cols]
 y = train.is_bot
 
 #Create and train model
-gnb = GaussianNB()
+gnb = DecisionTreeClassifier()
 gnb.fit(train[feature_cols].values, train["is_bot"])
 
 #Predict with model and print results
