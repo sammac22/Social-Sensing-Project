@@ -11,9 +11,10 @@ from sklearn.svm import SVC
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn import preprocessing
 from collections import defaultdict
+from textblob import TextBlob
+
 
 ##IMPORT FAKE TWEETS AND DELETE UNEEDED COLUMNS##
-
 names = ["id","text","source","user_id","truncated","in_reply_to_status_id","in_reply_to_user_id","in_reply_to_screen_name","retweeted_status_id","geo","place","contributors","retweet_count","reply_count","favorite_count","favorited","retweeted","possibly_sensitive","num_hashtags","num_urls","num_mentions","created_at","timestamp","crawled_at","updated"]
 dataset = pandas.read_csv('tweets.txt', names=names)
 
@@ -69,13 +70,14 @@ final = full.sample(frac=1)
 
 #Get word count
 final['word_count'] = 0
+final['sentiment'] = 0.0
 for index, row in final.iterrows():
-    row['word_count'] = len(row['text'].split())
     final.at[index,'word_count'] = len(row['text'].split())
+    final.at[index,'sentiment'] = TextBlob(row['text']).sentiment.polarity
 
 
 #Set columns we want to base prediction off
-feature_cols = ['retweet_count','reply_count','favorite_count', 'word_count']
+feature_cols = ['retweet_count','reply_count','favorite_count', 'word_count','sentiment']
 
 #Convert values in featured columns to floats
 for col in feature_cols:
@@ -89,7 +91,8 @@ X = train.loc[:, feature_cols]
 y = train.is_bot
 
 #Create and train model
-gnb = DecisionTreeClassifier()
+gnb = SVC()
+#gnb = DecisionTreeClassifier()
 gnb.fit(train[feature_cols].values, train["is_bot"])
 
 #Predict with model and print results
