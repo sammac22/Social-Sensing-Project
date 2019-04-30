@@ -1,16 +1,10 @@
-import csv
 import pandas
-from pandas.plotting import scatter_matrix
-import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
-from sklearn.naive_bayes import GaussianNB
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
-from sklearn import preprocessing
-from collections import defaultdict
 from textblob import TextBlob
 from sklearn.metrics import confusion_matrix
 from sklearn.ensemble import RandomForestClassifier
@@ -131,24 +125,24 @@ X = train.loc[:, feature_cols]
 y = train.is_bot
 
 # Create and train model
-# models = [SVC,DecisionTreeClassifier,LogisticRegression,LinearDiscriminantAnalysis,KNeighborsClassifier,RandomForestClassifier]
-# for model in models:
-#     print(str(model))
-#     gnb = model()
-#     gnb.fit(train[feature_cols].values, train["is_bot"])
-#
-#     # Predict with model and print results
-#     y_pred = gnb.predict(test[feature_cols])
-#     print("Number of mislabeled points out of a total {} points : {}, performance {:05.2f}%".format(test.shape[0],(test["is_bot"] != y_pred).sum(),100*(1-(test["is_bot"] != y_pred).sum()/test.shape[0])))
-#
-#     tn, fp, fn, tp = confusion_matrix(test['is_bot'], y_pred).ravel()
-#     print("True positives: " + str(tp))
-#     print("False positives: " + str(fp))
-#     print("True negatives: " + str(tn))
-#     print("False negatives: " + str(fn))
+models = [SVC,DecisionTreeClassifier,LogisticRegression,LinearDiscriminantAnalysis,KNeighborsClassifier,RandomForestClassifier]
+for model in models:
+    print(str(model))
+    gnb = model()
+    gnb.fit(train[feature_cols].values, train["is_bot"])
 
-gnb = DecisionTreeClassifier()
-gnb.fit(final[feature_cols].values, final["is_bot"])
+    # Predict with model and print results
+    y_pred = gnb.predict(test[feature_cols])
+    print("Number of mislabeled points out of a total {} points : {}, performance {:05.2f}%".format(test.shape[0],(test["is_bot"] != y_pred).sum(),100*(1-(test["is_bot"] != y_pred).sum()/test.shape[0])))
+
+    tn, fp, fn, tp = confusion_matrix(test['is_bot'], y_pred).ravel()
+    print("True positives: " + str(tp))
+    print("False positives: " + str(fp))
+    print("True negatives: " + str(tn))
+    print("False negatives: " + str(fn))
+
+# gnb = RandomForestClassifier()
+# gnb.fit(final[feature_cols].values, final["is_bot"])
 
 
 
@@ -156,20 +150,20 @@ gnb.fit(final[feature_cols].values, final["is_bot"])
 #THEN RETURN WHETHER OR NOT IT IS A BOT ALONG WITH THE ID OF THE ACCOUNT THAT TWEETED IT
 #EVERYTHING ABOVE THIS NEEDS TO BE RUN ON STARTUP
 
-id_of_tweet = ''
-status = api.get_status(id_of_tweet)
-tweets = []
-newTweet = {
-    'retweet_count': status.retweet_count,
-    'favourite_count': status.favorite_count,
-    'word_count': len(status.text.split()),
-    'sentiment': TextBlob(status.text).sentiment.polarity
-}
-tweets.append(newTweet)
-print(newTweet)
-tweetFrame = pandas.DataFrame(tweets)
-y_pred = gnb.predict(tweetFrame)
-print(y_pred)
+# id_of_tweet = ''
+# status = api.get_status(id_of_tweet)
+# tweets = []
+# newTweet = {
+#     'retweet_count': status.retweet_count,
+#     'favourite_count': status.favorite_count,
+#     'word_count': len(status.text.split()),
+#     'sentiment': TextBlob(status.text).sentiment.polarity
+# }
+# tweets.append(newTweet)
+# print(newTweet)
+# tweetFrame = pandas.DataFrame(tweets)
+# y_pred = gnb.predict(tweetFrame)
+# print(y_pred)
 
 
 

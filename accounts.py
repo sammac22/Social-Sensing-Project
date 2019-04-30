@@ -78,7 +78,7 @@ gnb.fit(final[feature_cols].values, final["is_bot"])
 #JUST LIKE OTHER FILE, BELOW THIS IS THE IMPORTANT FUNCTION THAT NEEDS TO BE CALLED, ABOVE THIS NEEDS TO BE RUN ON STARTUP
 # PLACE THE USER ID IN THE id VARIABLE AND RETURN WHETHER OR NOT IT IS A BOT
 
-id = '10788822'
+id = '1502026416'
 
 users = api.lookup_users(user_ids=[id])
 
@@ -91,7 +91,9 @@ for user in users:
         "statuses_count": user.statuses_count,
         "favourites_count": user.favourites_count
     }
+    print(user)
     userProfiles.append(newUserProfile)
+
 
 
 userFrame = pandas.DataFrame(userProfiles)
