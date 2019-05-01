@@ -50,6 +50,7 @@ function get_tweet(){
     } else {
       tweet_text("This tweet does not come from a bot")
       profile_text("This profile is not a bot")
+      get_user()
     }
   }
 }
