@@ -46,7 +46,7 @@ function get_tweet(){
     display_tweet(json.name, json.text)
     if(json.is_bot == 1){
       get_user()
-      tweet_text("This tweet does come from a bot")
+      tweet_text("This tweet is highly likely to come from a bot")
     } else {
       tweet_text("This tweet does not come from a bot")
       profile_text("This profile is not a bot")
